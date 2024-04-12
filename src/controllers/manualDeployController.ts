@@ -53,7 +53,7 @@ export const createAppBranch = catchAsync(async function(req:Request,res:Respons
     res.status(200).json({
         status:"success",
         message: {
-            appBranch
+            app:appBranch
         }
     });
 });
@@ -102,7 +102,7 @@ export const updateAppBranch = catchAsync(async(req:Request,res:Response,next:Ne
     res.status(200).json({
         status:"success",
         message:{
-            updatedAppBranch
+            app:updatedAppBranch
         }
     });
 });
@@ -202,58 +202,11 @@ export const deploymentApp = catchAsync(async(req:Request,res:Response,next:Next
     res.status(200).json({
         status:"success",
         message:{
-            updatedAppBranch
+            app:updatedAppBranch
         }
-    })
+    });
 });
 
-export const getAppJob = catchAsync(async(req:Request,res:Response,next:NextFunction) => {
-    const {id} = req.params;
-    
-    if(!id){
-        console.error("No Id Found!");
-        return next();
-    }
-
-    const appBranch = await App.findById(id);
-
-    if(!appBranch){
-        console.error("No App Found!");
-        return next();
-    }
-
-    const input = {
-        appId:appBranch.appId,
-        branchName: appBranch.branchName,
-        jobId:appBranch.jobId!
-    }
-
-    const getJobData = await getJob(input);
-    console.log(getJobData);
-
-    if(!getJobData){
-        console.error("Error getting Job data");
-        return next();
-    }
-
-    const updatedAppBranch = await App.findByIdAndUpdate(id,{
-        status:getJobData.summary?.status,
-    },{
-        new: true,
-        runValidators: true,
-    })
-    
-
-    const logUrl = getJobData.steps?.at(0)?.logUrl;
-
-    res.status(200).json({
-        status:"success",
-        message:{
-            logUrl,
-            updatedAppBranch
-        }
-    })
-});
 
 export const getApp = catchAsync(async(req:Request,res:Response,next:NextFunction) => {
     const {id} = req.params;
@@ -262,11 +215,92 @@ export const getApp = catchAsync(async(req:Request,res:Response,next:NextFunctio
         return next();
     }
     const appBranch = await App.findById(id);
-
+    
     res.status(200).json({
         status:"success",
         message:{
-            appBranch
+            app:appBranch
         }
     })
 });
+
+export const getAllApp = catchAsync(async(req:Request,res:Response,next:NextFunction) => {
+    const allAppBranch = await App.find();
+    
+    if(!allAppBranch){
+        console.error("Error fetching all apps");
+        return next();
+    }
+    
+    res.status(200).json({
+        status:"success",
+        message:{
+            apps:allAppBranch
+        }
+    })
+})
+
+const getAppJob = async (input:{appId:string,branchName:string,jobId:string}) => {    
+    const getJobData = await getJob(input);
+    console.log(getJobData);
+
+    if(!getJobData){
+        console.error("Error getting Job data");
+        return;
+    }
+
+    return getJobData.summary?.status;
+}
+
+export const updateStatus = catchAsync(async (req:Request,res:Response,next:NextFunction) => {
+    const {id} =  req.params;
+    console.log(id);
+    if(!id){
+        console.error("No Id Found!");
+        return;
+    }
+    const appBranch = await App.findById(id);
+
+    console.log(appBranch);
+
+    if(!appBranch){
+        console.error("Error fetching App");
+        return next();
+    }
+
+    if(appBranch.status === 'SUCCEED' || appBranch.status === 'FAILED'){
+        return res.status(200).json({
+            status:"success",
+            message:{
+                app:appBranch
+            }
+        })
+    }
+
+    let data;
+    let updatedAppBranch;
+    const myInterval = setInterval(async () => {
+        data = await getAppJob({appId:appBranch?.appId,branchName: appBranch?.branchName,jobId: appBranch?.jobId!})
+        console.log(data);
+        if(!data){
+            clearInterval(myInterval);
+            return next();
+        }
+        if(data === 'SUCCEED' || data === "FAILED"){
+            updatedAppBranch = await App.findByIdAndUpdate(id,{
+                status:data,
+            },{
+                new: true,
+                runValidators: true,
+            });
+            clearInterval(myInterval);
+            res.status(200).json({
+                status:"success",
+                message:{
+                    app:updatedAppBranch
+                }
+            })
+        }
+    }, 3000);
+
+})
