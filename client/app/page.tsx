@@ -5,7 +5,7 @@ import axios from "axios";
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const {data} = await axios.get(`http://127.0.0.1:5000/api/v1/manualDeploy/getApp`);
+  const {data} = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/api/v1/manualDeploy/getApp`);
 
   if(data.status != "success"){
     console.error("Error Fetching apps");

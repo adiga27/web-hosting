@@ -29,7 +29,7 @@ function ListApps(data:ListAppsProps) {
         try{
             setKey(id);
             e.preventDefault();
-            const {data} = await axios.delete(`http://localhost:5000/api/v1/manualDeploy/deleteApp/${id}`);
+            const {data} = await axios.delete(`${process.env.NEXT_PUBLIC_SERVER}/api/v1/manualDeploy/deleteApp/${id}`);
             if(data.status != 'success'){
                 console.log('error');
                 return Promise.reject(data);

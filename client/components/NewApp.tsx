@@ -26,7 +26,7 @@ function NewApp() {
       e.preventDefault();
       setLoading(true);
       
-      const {data} = await axios.post(`http://localhost:5000/api/v1/manualDeploy/createApp`,{
+      const {data} = await axios.post(`${process.env.NEXT_PUBLIC_SERVER}/api/v1/manualDeploy/createApp`,{
         name:app,
         branchName:branch,
         displayName:domain
@@ -40,7 +40,7 @@ function NewApp() {
      
     
       formdata.append("zipFile",file!);
-      const res = await axios.post(`http://localhost:5000/api/v1/manualDeploy/startDeployment/${data.message.app.id}`,formdata);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER}/api/v1/manualDeploy/startDeployment/${data.message.app.id}`,formdata);
     
       if(res.data.status !== 'success'){
         console.error("Error to start deployment");
@@ -54,7 +54,7 @@ function NewApp() {
       setLoading(false);
       router.refresh();
 
-      const getStatus = await axios.get(`http://localhost:5000/api/v1/manualDeploy/getStatus/${data.message.app.id}`);
+      const getStatus = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/api/v1/manualDeploy/getStatus/${data.message.app.id}`);
 
       if(getStatus.data.status !== 'success'){
         console.error("Error to start deployment");
