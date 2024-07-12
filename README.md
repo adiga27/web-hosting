@@ -35,16 +35,16 @@ npm install
 PORT = 5000
 
 # MongoDB Databse connection
-DATABASE_URL=mongodb+srv://<username>:<paassword>@cluster-name/database-name
+DATABASE_URL = mongodb+srv://<username>:<paassword>@cluster-name/database-name
 
 #Add AWS Credentials from IAM user of AWS
-W_AWS_REGION=
-W_AWS_ACCESS_KEY=
-W_AWS_SECRET_KEY=
+W_AWS_REGION =
+W_AWS_ACCESS_KEY =
+W_AWS_SECRET_KEY =
 ```
 2. Frontend `.env` in the client directory
 ```
-NEXT_PUBLIC_SERVER=http://localhost:5000
+NEXT_PUBLIC_SERVER = http://localhost:5000
 ```
 
 **4. Run the server**
@@ -64,7 +64,7 @@ npm run dev
     |\
     |__index.html *required\
     |__style.css\
-    |__script.js\
+    |__script.js
 
 ![alt text](./public/uploadFiles.png) 
 
