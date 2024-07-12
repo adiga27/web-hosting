@@ -57,7 +57,7 @@ function NewApp() {
       const getStatus = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/api/v1/manualDeploy/getStatus/${data.message.app.id}`);
 
       if(getStatus.data.status !== 'success'){
-        console.error("Error to start deployment");
+        console.error("Error to get job status");
         return Promise.reject(data);
       }
       router.refresh();

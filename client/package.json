@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
+    "firebase": "^10.12.2",
     "lucide-react": "^0.367.0",
     "next": "14.1.4",
     "react": "^18",
@@ -17,6 +18,7 @@
     "react-drag-drop-files": "^2.3.10"
   },
   "devDependencies": {
+    "@types/firebase": "^3.2.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

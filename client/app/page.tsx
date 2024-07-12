@@ -1,4 +1,5 @@
 import ListApps from "@/components/ListApps";
+import NavBar from "@/components/NavBar";
 import NewApp from "@/components/NewApp";
 import axios from "axios";
 
@@ -13,10 +14,10 @@ export default async function Home() {
 
   return(
     <main className="flex justify-center items-center flex-col gap-10 p-5">
+      {/* <NavBar /> */}
       <h2 className="text-3xl text-center">Web Hosting</h2>
       <NewApp/>
-      {
-        
+      { 
         <ListApps apps={data.message.apps}/> 
       }
     </main>
