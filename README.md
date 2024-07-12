@@ -59,12 +59,12 @@ npm run dev
 ```
 
 **5. Add details and upload frontend project in zip format**
-* files in zip files:
-    project.zip
-    |
-    |__index.html *required
-    |__style.css
-    |__script.js
+* files in zip files:\
+    project.zip\
+    |\
+    |__index.html *required\
+    |__style.css\
+    |__script.js\
 
 ![alt text](./public/uploadFiles.png) 
 
